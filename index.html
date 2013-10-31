@@ -1,0 +1,199 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <script src="https://sapui5.netweaver.ondemand.com/resources/sap-ui-core.js" id="sap-ui-bootstrap"
+	data-sap-ui-libs="sap.ui.commons, sap.suite.ui.commons"
+	data-sap-ui-theme="sap_bluecrystal">
+	
+</script>
+<!-- add sap.ui.table,sap.ui.ux3 and/or other libraries to 'data-sap-ui-libs' if required -->
+
+
+<script>
+
+//create the ApplicationHeader control
+var oAppHeader = new sap.ui.commons.ApplicationHeader("appHeader"); 
+
+//configure the branding area
+oAppHeader.setLogoText("Generate QR Code in SAPUI5");
+
+//configure the welcome area
+oAppHeader.setDisplayWelcome(true);
+oAppHeader.setUserName("Chandrashekhar Mahajan");
+
+//configure the log off area
+oAppHeader.setDisplayLogoff(true);
+
+oAppHeader.placeAt("content");
+
+
+//Create Contact Details UI
+var oMatrix = new sap.ui.commons.layout.MatrixLayout({
+	id : 'matrix4',
+	layoutFixed : true,
+	width : '1000px',
+	columns : 5,
+	widths : ['150px', '250px', '200px', '200px', '200px'] });
+
+var oCell = new sap.ui.commons.layout.MatrixLayoutCell({
+	colSpan: 5 });
+
+var oTV = new sap.ui.commons.TextView({
+	id : 'TV-Head',
+	text : 'Contact Data',
+	design : sap.ui.commons.TextViewDesign.H1 });
+
+oCell.addContent(oTV);
+oMatrix.createRow(oCell);
+
+var oLabel = new sap.ui.commons.Label({
+	id : 'L-Name',
+	text : 'Name' });
+
+var oTF = new sap.ui.commons.TextField({
+	id : 'TF-Name',
+	tooltip : 'Name',
+	width : '200px' });
+
+oLabel.setLabelFor(oTF);
+oMatrix.createRow(oLabel, oTF);
+
+
+oLabel = new sap.ui.commons.Label({
+	id : 'L-O-Name',
+	text : 'Orgnization Name' });
+
+oTF = new sap.ui.commons.TextField({
+	id : 'TF-O-Name',
+	tooltip : 'Orgnization Name',
+	width : '200px' });
+oLabel.setLabelFor(oTF);
+oMatrix.createRow(oLabel, oTF);
+
+oLabel = new sap.ui.commons.Label({
+	id : 'L-Address',
+	text : 'Address' });
+
+oTF = new sap.ui.commons.TextField({
+	id : 'TF-Address',
+	tooltip : 'Address',
+	width : '200px' });
+oLabel.setLabelFor(oTF); 
+oMatrix.createRow(oLabel, oTF);
+
+oLabel = new sap.ui.commons.Label({
+	id : 'L-Phone',
+	text : 'Phone Number' });
+
+oTF = new sap.ui.commons.TextField({
+	id : 'TF-Phone',
+	tooltip : 'Phone Number',
+	width : '200px' });
+oLabel.setLabelFor(oTF);
+oMatrix.createRow(oLabel, oTF);
+	
+oLabel = new sap.ui.commons.Label({
+	id : 'L-Email',
+	text : 'Email' });
+
+oTF = new sap.ui.commons.TextField({
+	id : 'TF-Email',
+	tooltip : 'Email',
+	width : '200px' });
+oLabel.setLabelFor(oTF);
+oMatrix.createRow(oLabel, oTF);
+
+oLabel = new sap.ui.commons.Label({
+	id : 'L-URL',
+	text : 'URL' });
+
+oTF = new sap.ui.commons.TextField({
+	id : 'TF-URL',
+	tooltip : 'URL',
+	width : '200px'	});
+oLabel.setLabelFor(oTF);
+oMatrix.createRow(oLabel, oTF);
+
+oLabel = new sap.ui.commons.Label({
+	id : 'L-Note',
+	text : 'Note' });
+
+oTF = new sap.ui.commons.TextField({
+	id : 'TF-Note',
+	tooltip : 'Note',
+	width : '200px' });
+oLabel.setLabelFor(oTF);
+oMatrix.createRow(oLabel, oTF);
+
+var oButton = new sap.ui.commons.Button({
+	id : 'B-Create',
+	text : 'Generate QR Code',
+	width : '10em',
+	press : function(){
+		var oCore = sap.ui.getCore();
+		var oTF = oCore.getControl('TF-Name');
+		var Name = oTF.getValue();
+		oTF = oCore.getControl('TF-O-Name');
+		var OrgName = oTF.getValue();
+		oTF = oCore.getControl('TF-Address');
+		var Address = oTF.getValue();
+		oTF = oCore.getControl('TF-Phone');
+		var Phone = oTF.getValue();
+		oTF = oCore.getControl('TF-Email');
+		var Email = oTF.getValue();
+		oTF = oCore.getControl('TF-URL');
+		var URL = oTF.getValue();
+		oTF = oCore.getControl('TF-Note');
+		var Note = oTF.getValue();
+		// URL for Google Chart API 
+		var url = 'http://chart.apis.google.com/chart?cht=qr&chs=250x250&chl=MECARD:N:'
+				 + Name +';ORG:' + OrgName + ';TEL:' + Phone + ';EMAIL:' + Email+ ';ADR:' + Address + ';URL:' + URL + ';NOTE:' + Note + ';;';
+			
+		
+		var oImage = new sap.ui.commons.Image("i1");
+		oImage.setSrc(url);
+		oImage.setTooltip(url);
+		oImage.setDecorative(false);
+	
+		var oVCard = new sap.suite.ui.commons.BusinessCard({
+		    firstTitle:  new sap.ui.commons.Label({id:"vcard1-name-label",text:Name,tooltip:Name}),
+		    iconPath: url,
+		    secondTitle: OrgName,
+		    imageTooltip:Name,
+		    width: "424px"
+		});
+
+		var oContentCard = new sap.ui.commons.layout.MatrixLayout({widths:["20px", "100px"]});
+		
+		oContentCard.createRow(new sap.ui.commons.TextView({text:"Address:"}), new sap.ui.commons.TextView({text:Address}));
+		oContentCard.createRow(new sap.ui.commons.TextView({text:"Phone:"}), new sap.ui.commons.TextView({text:Phone}));
+		oContentCard.createRow(new sap.ui.commons.TextView({text:"E-Mail:"}), new sap.ui.commons.TextView({text:Email}));
+		oContentCard.createRow(new sap.ui.commons.TextView({text:"URL:"}), new sap.ui.commons.TextView({text:URL}));		
+		
+		oVCard.setContent(oContentCard);
+
+
+		var oLayout = new sap.ui.commons.layout.HorizontalLayout("Layout1", {
+		        content: [oImage, oVCard]
+		});
+
+		// attach it to an element in the page
+		oLayout.placeAt("content");
+		
+	}
+	});
+
+
+oMatrix.createRow(oButton);
+
+// attach it to some element in the page
+oMatrix.placeAt('content');
+
+</script>
+
+<body class="sapUiBody" role="application">
+	<div id="content"></div>
+</body>
+</html>
